@@ -7,11 +7,11 @@ Attribute VB_Name = "GCore"
     Public Type MState
         state As Integer
         button As Integer
-        x As Single
-        y As Single
+        X As Single
+        Y As Single
     End Type
     Public Enum imgIndex
-        imgGetwidth = 0
+        imgGetWidth = 0
         imgGetHeight = 1
         imgGetGIFFrameCount = 2
     End Enum
@@ -75,8 +75,8 @@ Attribute VB_Name = "GCore"
         DirHorizontalVertical = 3
     End Enum
     Public Type GraphicsBound
-        x As Long
-        y As Long
+        X As Long
+        Y As Long
         Width As Long
         Height As Long
         WSc As Single
@@ -98,7 +98,7 @@ Attribute VB_Name = "GCore"
     Public FPSWarn As Long
     Public EmeraldInstalled As Boolean
     Public BassInstalled As Boolean
-    Public Const Version As Long = 19062503
+    Public Const Version As Long = 19062902
     Public TextHandle As Long, WaitChr As String
     Dim AssetsTrees() As AssetsTree
     Dim LastKeyUpRet As Boolean
@@ -258,7 +258,7 @@ sth:
         
         GetWinNTVersion = Left(strOSversion, 3)
     End Function
-    Public Sub BlurTo(DC As Long, srcDC As Long, buffWin As Form, Optional Radius As Long = 60)
+    Public Sub BlurTo(DC As Long, srcDC As Long, buffWin As Form, Optional radius As Long = 60)
         Dim i As Long, g As Long, e As Long, b As BlurParams, w As Long, h As Long
         '粘贴到缓冲窗口
         buffWin.AutoRedraw = True
@@ -268,7 +268,7 @@ sth:
         GdipCreateBitmapFromHBITMAP buffWin.Image.handle, buffWin.Image.hpal, i
         
         '模糊操作
-        GdipCreateEffect2 GdipEffectType.Blur, e: b.Radius = Radius: GdipSetEffectParameters e, b, LenB(b)
+        GdipCreateEffect2 GdipEffectType.Blur, e: b.radius = radius: GdipSetEffectParameters e, b, LenB(b)
         GdipGetImageWidth i, w: GdipGetImageHeight i, h
         GdipBitmapApplyEffect i, e, NewRectL(0, 0, w, h), 0, 0, 0
         
@@ -278,12 +278,12 @@ sth:
         GdipDisposeImage i: GdipDeleteGraphics g: GdipDeleteEffect e '垃圾处理
         buffWin.AutoRedraw = False
     End Sub
-    Public Sub BlurImg(img As Long, Radius As Long)
+    Public Sub BlurImg(img As Long, radius As Long)
         Dim b As BlurParams, e As Long, w As Long, h As Long
         
         '模糊操作
 
-        GdipCreateEffect2 GdipEffectType.Blur, e: b.Radius = Radius: GdipSetEffectParameters e, b, LenB(b)
+        GdipCreateEffect2 GdipEffectType.Blur, e: b.radius = radius: GdipSetEffectParameters e, b, LenB(b)
         GdipGetImageWidth img, w: GdipGetImageHeight img, h
         GdipBitmapApplyEffect img, e, NewRectL(0, 0, w, h), 0, 0, 0
         
@@ -308,17 +308,17 @@ sth:
         
         CreateCDC = DC
     End Function
-    Public Sub PaintDC(DC As Long, destDC As Long, Optional x As Long = 0, Optional y As Long = 0, Optional cx As Long = 0, Optional cy As Long = 0, Optional cw, Optional ch, Optional alpha)
+    Public Sub PaintDC(DC As Long, destDC As Long, Optional X As Long = 0, Optional Y As Long = 0, Optional cx As Long = 0, Optional cy As Long = 0, Optional cw, Optional ch, Optional Alpha)
         Dim b As BLENDFUNCTION, index As Integer, bl As Long
         
-        If Not IsMissing(alpha) Then
-            If alpha < 0 Then alpha = 0
-            If alpha > 1 Then alpha = 1
+        If Not IsMissing(Alpha) Then
+            If Alpha < 0 Then Alpha = 0
+            If Alpha > 1 Then Alpha = 1
             With b
                 .AlphaFormat = &H1
                 .BlendFlags = &H0
                 .BlendOp = 0
-                .SourceConstantAlpha = Int(alpha * 255)
+                .SourceConstantAlpha = Int(Alpha * 255)
             End With
             CopyMemory bl, b, 4
         End If
@@ -326,10 +326,10 @@ sth:
         If IsMissing(cw) Then cw = GW - cx
         If IsMissing(ch) Then ch = GH - cy
         
-        If IsMissing(alpha) Then
-            BitBlt destDC, x, y, cw, ch, DC, cx, cy, vbSrcCopy
+        If IsMissing(Alpha) Then
+            BitBlt destDC, X, Y, cw, ch, DC, cx, cy, vbSrcCopy
         Else
-            AlphaBlend destDC, x, y, cw, ch, DC, cx, cy, cw, ch, bl
+            AlphaBlend destDC, X, Y, cw, ch, DC, cx, cy, cw, ch, bl
         End If
     End Sub
     Function Cubic(t As Single, arg0 As Single, arg1 As Single, arg2 As Single, arg3 As Single) As Single
@@ -339,27 +339,27 @@ sth:
     End Function
 '========================================================
 '   Mouse
-    Public Sub UpdateMouse(x As Single, y As Single, state As Long, button As Integer)
+    Public Sub UpdateMouse(X As Single, Y As Single, state As Long, button As Integer)
         With Mouse
-            .x = x
-            .y = y
+            .X = X
+            .Y = Y
             .state = state
             .button = button
         End With
     End Sub
-    Public Function CheckMouse(x As Long, y As Long, w As Long, h As Long) As MButtonState
+    Public Function CheckMouse(X As Long, Y As Long, w As Long, h As Long) As MButtonState
         'Return Value:0=none,1=in,2=down,3=up
-        If Mouse.x >= x And Mouse.y >= y And Mouse.x <= x + w And Mouse.y <= y + h Then
+        If Mouse.X >= X And Mouse.Y >= Y And Mouse.X <= X + w And Mouse.Y <= Y + h Then
             CheckMouse = Mouse.state + 1
             If Mouse.state = 2 Then Mouse.state = 0
         End If
     End Function
     Public Function CheckMouse2() As MButtonState
         'Return Value:0=none,1=in,2=down,3=up
-        If Mouse.x >= DrawF.x And Mouse.y >= DrawF.y And Mouse.x <= DrawF.x + DrawF.Width And Mouse.y <= DrawF.y + DrawF.Height Then
+        If Mouse.X >= DrawF.X And Mouse.Y >= DrawF.Y And Mouse.X <= DrawF.X + DrawF.Width And Mouse.Y <= DrawF.Y + DrawF.Height Then
             CheckMouse2 = Mouse.state + 1
             If DrawF.CrashIndex <> 0 Then
-                If ColorLists(DrawF.CrashIndex).IsAlpha((Mouse.x - DrawF.x) * DrawF.WSc, (Mouse.y - DrawF.y) * DrawF.HSc) = False Then CheckMouse2 = mMouseOut: Exit Function
+                If ColorLists(DrawF.CrashIndex).IsAlpha((Mouse.X - DrawF.X) * DrawF.WSc, (Mouse.Y - DrawF.Y) * DrawF.HSc) = False Then CheckMouse2 = mMouseOut: Exit Function
             End If
             If Mouse.state = 2 Then Mouse.state = 0
         End If

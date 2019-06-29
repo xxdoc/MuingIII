@@ -16,6 +16,7 @@ Public HotLoad As Boolean
 Public AssetsFolder As String
 Dim Mems() As GMem
 Dim effect As Long, effectw As Long, effecth As Long, effectimg As Long, effectindex As Integer
+Dim DisposeMark As Boolean
 Private Sub Class_Initialize()
     ReDim Mems(0)
 End Sub
@@ -224,6 +225,7 @@ Public Property Get ImgSize(n, sizeIndex As imgIndex)
     End Select
 End Property
 Public Sub Dispose()
+    If DisposeMark = True Then Exit Sub
     For i = 1 To UBound(Mems)
         If Not Mems(i).copyed Then
             Select Case Mems(i).kind
@@ -243,6 +245,7 @@ Public Sub Dispose()
             End If
         End If
     Next
+    DisposeMark = True
 End Sub
 Public Property Get ResourceGIFHandle(index As Integer, frame As Integer) As Long
     ResourceGIFHandle = Mems(index).GIF.frames(frame)
@@ -294,7 +297,7 @@ Public Function GetImage(ByVal name As String) As Integer
         End If
     End If
 End Function
-Public Sub newImage(path As String, Optional arg1, Optional arg2)
+Public Sub newImage(path As String, Optional arg1, Optional arg2, Optional CustomName As String = "")
     'when arg1 is missing ; i.w = i.w
     'when arg2 is missing but arg1 has content ; i.w = i.w * arg1
     'other ; i.w = arg1
@@ -336,7 +339,7 @@ Public Sub newImage(path As String, Optional arg1, Optional arg2)
     temp = Split(path, "\")
     ReDim Preserve Mems(UBound(Mems) + 1)
     With Mems(UBound(Mems))
-        .name = temp(UBound(temp))
+        .name = IIf(CustomName = "", temp(UBound(temp)), CustomName)
         .Folder = temp(UBound(temp) - 1)
         .w = w
         .h = h

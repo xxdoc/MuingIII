@@ -69,10 +69,10 @@ Public Sub SaveManDialog()
     Next
     
     Page.Writes (Int(DataPage / max) + 1) & " / " & (Int(ESave.Count / max) + 1), GW / 2, GH - 120, 16, argb(150, 27, 27, 27), align:=StringAlignmentCenter
-    If Page.ShowColorButton(2, GW / 2 - 80 - 20, GH - 120, 40, 22, "<", argb(150, 27, 27, 27), argb(255, 222, 222, 222), argb(130, 95, 229, 221), size:=16, Radius:=60) = 3 Then
+    If Page.ShowColorButton(2, GW / 2 - 80 - 20, GH - 120, 40, 22, "<", argb(150, 27, 27, 27), argb(255, 222, 222, 222), argb(130, 95, 229, 221), size:=16, radius:=60) = 3 Then
         If DataPage > 0 Then DataPage = DataPage - max: ECore.NewTransform
     End If
-    If Page.ShowColorButton(2, GW / 2 + 80 - 20, GH - 120, 40, 22, ">", argb(150, 27, 27, 27), argb(255, 222, 222, 222), argb(130, 95, 229, 221), size:=16, Radius:=60) = 3 Then
+    If Page.ShowColorButton(2, GW / 2 + 80 - 20, GH - 120, 40, 22, ">", argb(150, 27, 27, 27), argb(255, 222, 222, 222), argb(130, 95, 229, 221), size:=16, radius:=60) = 3 Then
         If (Int(DataPage / max) + 1) < (Int(ESave.Count / max) + 1) Then DataPage = DataPage + max: ECore.NewTransform
     End If
 End Sub
@@ -87,15 +87,9 @@ Public Sub LOGODialog()
     h = Page.Res.ImgSize("logo.png", imgGetHeight)
     If w = 0 Then Exit Sub
     
-    Page.Clear argb(255, 16, 16, 35)
+    Page.Clear argb(255, 255, 255, 255)
     
-    If GetTickCount - OpenTime >= 2000 Then
-        If PreLoadCount <> LoadedCount Then
-            Page.DrawImageEx "logo.png", GW / 2, GH * 0.85 / 2, Int(GW * 0.45), Int((GW * 0.45) / w * h), 1
-        End If
-    Else
-        Page.DrawImageEx "logo.png", GW / 2, GH / 2, Int(GW * 0.45), Int((GW * 0.45) / w * h), 1
-    End If
+    Page.DrawImageEx "dancemusic.png", GW / 2, GH / 2 + Sin(GetTickCount / 100) * 20 - 50, 97 - Sin(GetTickCount / 100) * 20, 95 - Cos(GetTickCount / 100) * 20, posOnCenter
     
     Dim pro As Single
     
@@ -124,14 +118,14 @@ Public Sub LOGODialog()
             If GetTickCount - ChangeTime <= 500 Then
                 pro = LastLoadPro2 + (pro - LastLoadPro2) * (GetTickCount - ChangeTime) / 500
             End If
-            Page.Paint 2, GW / 2 - GW * 0.5 / 2, GH * 0.8, GW * 0.5, 14, argb(255, 127, 127, 127), 14
-            Page.Paint 2, GW / 2 - GW * 0.5 / 2, GH * 0.8, GW * 0.5 * pro, 14, argb(255, 255, 255, 255), 14
+            Page.Paint 2, GW / 2 - GW * 0.5 / 2, GH * 0.8, GW * 0.5, 14, argb(255, 242, 242, 242), 14
+            Page.Paint 2, GW / 2 - GW * 0.5 / 2, GH * 0.8, GW * 0.5 * pro, 14, argb(255, 127, 127, 127), 14
         End If
     End If
 End Sub
 Public Sub SaveDialog()
     Page.Paint 0, 0, 0, 600, 76, argb(255, 242, 242, 242)
-    Page.DrawImage "save.png", 40, 40, alpha:=1
+    Page.DrawImage "save.png", 40, 40, Alpha:=1
     Page.Writes "你希望该应用在以下位置保存数据吗？" & vbCrLf & ESave.path, 40, 130, 18, argb(255, 64, 64, 64)
     
     Page.Writes "*如果不允许，该应用可能永远保持初始状态。", 40, 400 - 110, 16, argb(255, 96, 96, 96)
@@ -171,6 +165,7 @@ Private Sub Class_Initialize()
     Set Page = New GPage
     Page.Create Me
     Page.Res.NewImages App.path & "\assets\debug"
+    Page.Res.newImage App.path & "\assets\dancemusic.png"
     
     BDC = CreateCDC(GW, GH)
 End Sub
