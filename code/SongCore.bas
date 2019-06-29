@@ -11,13 +11,13 @@ Public Type SongInfo
     name As String
     Artist As String
     Path As String
-    MakerCID As String
+    MachineCode As String
     Follower As SongFollower
 End Type
 Public SongList() As SongInfo
 Public SongPath As String
 Public SongRes As GResource, CurrentSong As Long
-Public WelcomePage As WelcomePage, MainPage As MainPage, SetPage As SetPage
+Public WelcomePage As WelcomePage, MainPage As MainPage, SetPage As SetPage, EditPage As EditPage
 Public BGM As GMusic
 Public Enum SongPic
     Bg = 0
@@ -25,9 +25,9 @@ Public Enum SongPic
     SCircle = 2
     BCircle = 3
 End Enum
-Function SongP(i As Long, k As SongPic) As Long
+Function SongP(i As Long, K As SongPic) As Long
     If UBound(SongList) = 0 Then SongP = 1: Exit Function
-    SongP = i * 4 + k - 3
+    SongP = i * 4 + K - 3
 End Function
 Sub GetSongList()
     '取得歌曲文件夹
@@ -48,6 +48,7 @@ Sub GetSongList()
             With SongList(UBound(SongList))
                 .Path = SongPath & f
                 .name = "Kiss me"
+                ReDim .Follower.Obj(0)
             End With
             SongRes.newImage SongPath & f & "\background.png", GW, GH, UBound(SongList) & ".png"
             SongRes.newImage SongPath & f & "\background.png", GW, GH, UBound(SongList) & " blur.png"
@@ -68,6 +69,7 @@ Sub GetSongList()
     Set WelcomePage.Page.Res = SongRes
     Set MainPage.Page.Res = SongRes
     Set SetPage.Page.Res = SongRes
+    Set EditPage.Page.Res = SongRes
     
     '随机选曲
     Randomize

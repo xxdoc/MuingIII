@@ -14,6 +14,7 @@ Attribute VB_Exposed = False
 '======================================
 '   页面绘制器
     Public Page As GPage
+    Dim IconOn As Boolean
     Dim SY As Long
 '======================================
 
@@ -37,19 +38,19 @@ Public Sub Update()
     End If
     
     '歌曲列表
-    Dim i As Long, Y As Long
-    For i = 1 To UBound(SongList)
-        Y = 496 + (i - 1) * 80 + SY
+    Dim I As Long, Y As Long
+    For I = 1 To UBound(SongList)
+        Y = 496 + (I - 1) * 80 + SY
         If Y >= 496 - 100 And Y <= GH + 100 Then
-            If CurrentSong = i Then Page.DrawImage "songfocus.png", 65, 493 + (i - 1) * 80 + SY, Alpha:=1
-            Page.DrawImage SongP(i, SCircle), 68, Y, Alpha:=1
-            Page.Writes SongList(i).name, 135, 510 + (i - 1) * 80 + SY, 24, argb(255, 0, 0, 0)
-            If CurrentSong <> i Then
-                Page.DrawImage "songfocus.png", 65, 493 + (i - 1) * 80 + SY, Alpha:=0
+            If CurrentSong = I Then Page.DrawImage "songfocus.png", 65, 493 + (I - 1) * 80 + SY, Alpha:=1
+            Page.DrawImage SongP(I, SCircle), 68, Y, Alpha:=1
+            Page.Writes SongList(I).name, 135, 510 + (I - 1) * 80 + SY, 24, argb(255, 0, 0, 0)
+            If CurrentSong <> I Then
+                Page.DrawImage "songfocus.png", 65, 493 + (I - 1) * 80 + SY, Alpha:=0
                 If CheckMouse2 = mMouseUp Then
-                    BGM.Create SongList(i).Path & "\music.mp3"
+                    BGM.Create SongList(I).Path & "\music.mp3"
                     BGM.Play
-                    CurrentSong = i
+                    CurrentSong = I
                     ECore.NewTransform transFadeIn, 500
                 End If
             End If
@@ -60,7 +61,12 @@ Public Sub Update()
     Page.DrawImage "listcover.png", 0, 376, Alpha:=1, Direction:=DirVertical
     
     '当前歌曲
+    Dim SON As Boolean
     Page.DrawImage SongP(CurrentSong, BCircle), GW / 2, 236, Alpha:=1, Pos:=posOnCenter
+    SON = (CheckMouse2 > 0)
+    If SON Then Page.DrawImage "playbtn.png", GW / 2, 236, Alpha:=1, Pos:=posOnCenter
+    If IconOn <> SON Then IconOn = SON: ECore.NewTransform
+    
     Page.Writes SongList(CurrentSong).name, GW / 2, 376, 28, argb(255, 0, 0, 0), align:=StringAlignmentCenter
     Page.Writes "2333333 SSS", GW / 2, 416, 28, argb(255, 0, 176, 240), align:=StringAlignmentCenter
     

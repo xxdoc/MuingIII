@@ -50,7 +50,7 @@ Private Sub Form_Load()
     StartEmerald Me.Hwnd, 715, 793
     '创建字体
     Set EF = New GFont
-    EF.AddFont App.path & "\MuingIII.UI.otf"
+    EF.AddFont App.Path & "\MuingIII.UI.otf"
     EF.MakeFont "Abadi MT Extra Light"
     
     '创建页面管理器
@@ -62,7 +62,7 @@ Private Sub Form_Load()
     
     '创建音乐列表
     Set MusicList = New GMusicList
-    MusicList.Create App.path & "\music"
+    MusicList.Create App.Path & "\music"
 
     '开始显示
     Me.Show
@@ -72,6 +72,7 @@ Private Sub Form_Load()
     Set WelcomePage = New WelcomePage
     Set MainPage = New MainPage
     Set SetPage = New SetPage
+    Set EditPage = New EditPage
     
     '读取列表
     Call GetSongList
@@ -87,7 +88,7 @@ End Sub
 
 Private Sub Form_MouseMove(button As Integer, Shift As Integer, X As Single, Y As Single)
     '发送鼠标信息
-    If Mouse.state = 0 Then
+    If Mouse.State = 0 Then
         UpdateMouse X, Y, 0, button
     Else
         Mouse.X = X: Mouse.Y = Y

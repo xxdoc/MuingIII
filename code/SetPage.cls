@@ -48,6 +48,7 @@ Public Sub Update()
     Page.DrawImage "returnbtn.png", 60, 130 / 2, Alpha:=1, Pos:=posOnCenter
     If CheckMouse2 = mMouseUp Then ECore.NewTransform transFadeIn, 300, "MainPage"
     Page.DrawImage "editbtn.png", GW - 140, 130 / 2, Alpha:=1, Pos:=posOnCenter
+    If CheckMouse2 = mMouseUp Then ECore.NewTransform transFadeIn, 300, "EditPage"
     Page.DrawImage "delbtn.png", GW - 60, 130 / 2, Alpha:=1, Pos:=posOnCenter
     Page.DrawImage "createbutton.png", GW - 80, GH - 320, Alpha:=1, Pos:=posOnCenter
     
